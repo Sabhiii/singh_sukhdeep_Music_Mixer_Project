@@ -6,7 +6,7 @@
   
   body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    background: linear-gradient(135deg, #3b1212, #2b0c233b);
     color: #fff;
     min-height: 100vh;
     display: flex;
@@ -111,19 +111,19 @@
   }
   
   .drums-icon {
-    background-color: #f72585;
+    background-color: #fee20b;
   }
   
   .bass-icon {
-    background-color: #7209b7;
+    background-color: #920cec;
   }
   
   .melody-icon {
-    background-color: #3a0ca3;
+    background-color: #e91aca;
   }
   
   .vocals-icon {
-    background-color: #4361ee;
+    background-color: #13f8bf;
   }
   
   .effects-icon {
@@ -174,35 +174,35 @@
   @keyframes pulse {
     from {
         transform: scale(1);
-        box-shadow: 0 0 10px rgba(76, 201, 240, 0.5);
+        box-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
     }
     to {
         transform: scale(1.05);
-        box-shadow: 0 0 20px rgba(76, 201, 240, 0.8);
+        box-shadow: 0 0 20px rgba(0, 195, 255, 0.8);
     }
   }
   
   .drop-zone {
     width: 100%;
     height: 60px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 2px dashed rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 0, 0, 0.258);
+    border: 2px dashed rgba(204, 255, 0, 0.3);
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(179, 255, 0, 0.6);
     transition: all 0.3s ease;
   }
   
   .drop-zone.drag-over {
-    background-color: rgba(76, 201, 240, 0.3);
-    border-color: #4cc9f0;
+    background-color: rgba(239, 167, 34, 0.3);
+    border-color: #c2f04c;
   }
   
   .drop-zone.has-sound {
-    background-color: rgba(76, 201, 240, 0.2);
+    background-color: rgba(167, 205, 18, 0.2);
     border-style: solid;
     color: white;
   }
