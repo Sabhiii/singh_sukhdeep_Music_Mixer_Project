@@ -1,4 +1,3 @@
-// VARIABLES
 const soundItems = document.querySelectorAll('.sound-item');
 const dropZones = document.querySelectorAll('.drop-zone');
 const playBtn = document.querySelector('#play-btn');
@@ -14,9 +13,9 @@ const audioFiles = {
   effects: 'effects.mp3'
 };
 
-const audioElements = {}; // store <audio> tags
+const audioElements = {}; 
 
-// FUNCTIONS
+
 
 function createAudioElements() {
   for (const key in audioFiles) {
@@ -89,9 +88,9 @@ function resetMixer() {
   stopAllSounds();
 }
 
-// EVENT LISTENERS
 
-createAudioElements(); // run immediately
+
+createAudioElements(); 
 
 soundItems.forEach(function (item) {
   item.addEventListener('dragstart', allowDrag);
