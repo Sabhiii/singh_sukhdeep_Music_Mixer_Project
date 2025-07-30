@@ -1,92 +1,108 @@
-// variables
-let soundItems = document.querySelectorAll('.sound-item'),
-    dropZones = document.querySelectorAll('.drop-zone'),
-    playBtn = document.querySelector('#play-btn'),
-    stopBtn = document.querySelector('#stop-btn'),
-    resetBtn = document.querySelector('#reset-btn'),
-    audioContainer = document.querySelector('#audio-container');
+// VARIABLES
+const soundItems = document.querySelectorAll('.sound-item');
+const dropZones = document.querySelectorAll('.drop-zone');
+const playBtn = document.querySelector('#play-btn');
+const stopBtn = document.querySelector('#stop-btn');
+const resetBtn = document.querySelector('#reset-btn');
+const audioContainer = document.querySelector('#audio-container');
 
-let audioFiles = {
-    drums: 'drum.mp3',
-    bass: 'bass.mp3',
-    melody: 'melody.mp3',
-    vocals: 'vocals.mp3',
-    effects: 'effects.mp3'
+const audioFiles = {
+  drums: 'drum.mp3',
+  bass: 'bass.mp3',
+  melody: 'melody.mp3',
+  vocals: 'vocals.mp3',
+  effects: 'effects.mp3'
 };
 
-let audioElements = {}; // to store audio tags by ID
+const audioElements = {}; // store <audio> tags
 
-// functions
+// FUNCTIONS
+
 function createAudioElements() {
-    for (let key in audioFiles) {
-        let audio = document.createElement('audio');
-        audio.id = `audio-${key}`;
-        audio.src = `audio/${audioFiles[key]}`;
-        audio.loop = true;
-        audio.preload = 'auto';
-        audioContainer.appendChild(audio);
-        audioElements[key] = audio;
-    }
+  for (const key in audioFiles) {
+    const audio = document.createElement('audio');
+    audio.id = 'audio-' + key;
+    audio.src = 'audio/' + audioFiles[key];
+    audio.loop = true;
+    audio.preload = 'auto';
+    audioContainer.appendChild(audio);
+    audioElements[key] = audio;
+  }
 }
 
 function allowDrag(event) {
-    event.dataTransfer.setData('text/plain', this.dataset.sound);
+  event.dataTransfer.setData('text/plain', event.currentTarget.dataset.sound);
 }
 
 function allowDragOver(event) {
-    event.preventDefault();
+  event.preventDefault();
+  event.currentTarget.classList.add('drag-over');
 }
 
-function allowDrop(event) {
-    event.preventDefault();
-    let soundKey = event.dataTransfer.getData('text/plain');
-
-    if (this.children.length === 0) {
-        let dragged = document.querySelector(`[data-sound="${soundKey}"]`);
-        this.appendChild(dragged.cloneNode(true)); // clone so original stays
-        console.log(`Playing: ${soundKey}`);
-        audioElements[soundKey].play();
-    } else {
-        console.log('Drop zone already occupied');
-    }
+function clearDragStyle(event) {
+  event.currentTarget.classList.remove('drag-over');
 }
 
-function playAll() {
-    for (let key in audioElements) {
-        audioElements[key].play();
-    }
+function handleDrop(event) {
+  event.preventDefault();
+  clearDragStyle(event);
+
+  const soundKey = event.dataTransfer.getData('text/plain');
+
+  if (
+    event.currentTarget.children.length === 0 ||
+    event.currentTarget.innerText === 'Drop here'
+  ) {
+    const dragged = document.querySelector('[data-sound="' + soundKey + '"]');
+    event.currentTarget.innerHTML = ''; // remove "Drop here" text
+    event.currentTarget.appendChild(dragged.cloneNode(true));
+    event.currentTarget.classList.add('has-sound');
+    audioElements[soundKey].play();
+  }
 }
 
-function stopAll() {
-    for (let key in audioElements) {
-        audioElements[key].pause();
-        audioElements[key].currentTime = 0;
-    }
+function playAllSounds() {
+  for (const key in audioElements) {
+    audioElements[key].play();
+  }
+}
+
+function stopAllSounds() {
+  for (const key in audioElements) {
+    audioElements[key].pause();
+    audioElements[key].currentTime = 0;
+  }
 }
 
 function resetMixer() {
-    soundItems.forEach(item => {
-        document.querySelector('.sound-items').appendChild(item);
-    });
+  const library = document.querySelector('.sound-items');
 
-    dropZones.forEach(zone => {
-        zone.innerHTML = 'Drop here';
-    });
+  soundItems.forEach(function (item) {
+    library.appendChild(item);
+  });
 
-    stopAll();
+  dropZones.forEach(function (zone) {
+    zone.innerHTML = 'Drop here';
+    zone.classList.remove('has-sound');
+  });
+
+  stopAllSounds();
 }
 
-// event listeners
-window.addEventListener('DOMContentLoaded', () => {
-    createAudioElements();
+// EVENT LISTENERS
 
-    soundItems.forEach(item => item.addEventListener('dragstart', allowDrag));
-    dropZones.forEach(zone => {
-        zone.addEventListener('dragover', allowDragOver);
-        zone.addEventListener('drop', allowDrop);
-    });
+createAudioElements(); // run immediately
 
-    playBtn.addEventListener('click', playAll);
-    stopBtn.addEventListener('click', stopAll);
-    resetBtn.addEventListener('click', resetMixer);
+soundItems.forEach(function (item) {
+  item.addEventListener('dragstart', allowDrag);
 });
+
+dropZones.forEach(function (zone) {
+  zone.addEventListener('dragover', allowDragOver);
+  zone.addEventListener('dragleave', clearDragStyle);
+  zone.addEventListener('drop', handleDrop);
+});
+
+playBtn.addEventListener('click', playAllSounds);
+stopBtn.addEventListener('click', stopAllSounds);
+resetBtn.addEventListener('click', resetMixer);
